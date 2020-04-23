@@ -1,0 +1,29 @@
+---
+- name: Install rsyslog packages
+  package:
+    name: "{{ rsyslog_packages }}"
+    state: present
+
+- name: Create the rsyslog work directory
+  file:
+    path: "{{ rsyslog_work_directory }}"
+    owner: "{{ rsyslog_user }}"
+    group: "{{ rsyslog_group }}"
+    mode: 0755
+    state: directory
+
+- name: Configure the rsyslog.conf
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+    owner: "{{ rsyslog_user }}"
+    group: "{{ rsyslog_group }}"
+    mode: 0644
+  notify:
+    - restart rsyslog
+
+- name: Manage rsyslog service
+  service:
+    name: "{{ rsyslog_service_name }}"
+    enabled: "{{ rsyslog_service_enabled }}"
+    state: "{{ rsyslog_service_state }}"

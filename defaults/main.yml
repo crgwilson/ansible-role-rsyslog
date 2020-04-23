@@ -1,0 +1,62 @@
+---
+rsyslog_packages:
+  - rsyslog
+
+rsyslog_user: root
+rsyslog_group: root
+
+rsyslog_service_name: rsyslog
+rsyslog_service_state: started
+rsyslog_service_enabled: true
+
+rsyslog_work_directory: /var/spool/rsyslog
+
+rsyslog_modules:
+  - load: imuxsock
+  - load: imklog
+  - load: builtin:omfile
+    Template: RSYSLOG_TraditionalFileFormat
+    DirCreateMode: 0755
+    FileCreateMode: 0640
+    fileOwner: root
+    fileGroup: adm
+
+rsyslog_templates: []
+
+rsyslog_inputs: []
+
+rsyslog_globals:
+  workDirectory: "{{ rsyslog_work_directory }}"
+  umask: '0022'
+
+rsyslog_includes:
+  - file: /etc/rsyslog.d/*
+    mode: optional
+
+rsyslog_actions: []
+
+rsyslog_filters:
+  - facility: auth,authpriv.*
+    file: /var/log/auth.log
+  - facility: '*.*;auth,authpriv.none'
+    file: -/var/log/syslog
+  - facility: daemon.*
+    file: -/var/log/daemon.log
+  - facility: kern.*
+    file: -/var/log/kern.log
+  - facility: lpr.*
+    file: -/var/log/lpr.log
+  - facility: mail.*
+    file: -/var/log/mail.log
+  - facility: user.*
+    file: -/var/log/user.log
+  - facility: mail.info
+    file: -/var/log/mail.info
+  - facility: mail.warn
+    file: -/var/log/mail.warn
+  - facility: mail.err
+    file: /var/log/mail.err
+  - facility: '*.=debug,auth,authpriv.none,news.none;mail.none'
+    file: -/var/log/debug
+  - facility: '*.=info;*.=notice;*.=warn,auth,authpriv.none,cron,daemon.none,mail,news.none'
+    file: -/var/log/messages

@@ -1,0 +1,59 @@
+{{ ansible_managed | comment }}
+
+{% for module in rsyslog_modules %}
+module(
+{%   for k,v in module.items() %}
+  {{ k }}="{{ v }}"
+{%   endfor -%}
+)
+{% endfor %}
+
+{% for template in rsyslog_templates %}
+template(
+{%   for k,v in template.items() %}
+  {{ k }}="{{ v }}"
+{%   endfor %}
+)
+{% endfor %}
+
+{% for input in rsyslog_inputs %}
+input(
+{%   for k,v in input.items() %}
+  {{ k }}="{{ v }}"
+{%   endfor -%}
+)
+{% endfor %}
+
+global(
+{% for k,v in rsyslog_globals.items() %}
+  {{ k }}="{{ v }}"
+{% endfor -%}
+)
+
+{% for include in rsyslog_includes %}
+include(
+{%   for k,v in include.items() %}
+  {{ k }}="{{ v }}"
+{%   endfor %}
+)
+{% endfor %}
+
+{% for action in rsyslog_actions %}
+{%   if 'ruleset' in action -%}
+ruleset(name="{{ action['ruleset'] }}") {
+{%   endif -%}
+action(
+{%   for k,v in action.items() %}
+{%     if k != 'ruleset' -%}
+  {{ k }}="{{ v }}"
+{%     endif -%}
+{%   endfor %}
+)
+{%   if 'ruleset' in action -%}
+}
+{%   endif -%}
+{% endfor %}
+
+{% for rule in rsyslog_filters %}
+{{ rule['facility'] }} {{ rule['file'] }}
+{% endfor %}
