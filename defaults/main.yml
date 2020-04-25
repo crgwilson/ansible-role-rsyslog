@@ -16,8 +16,8 @@ rsyslog_modules:
   - load: imklog
   - load: builtin:omfile
     Template: RSYSLOG_TraditionalFileFormat
-    DirCreateMode: 0755
-    FileCreateMode: 0640
+    DirCreateMode: '0755'
+    FileCreateMode: '0640'
     fileOwner: root
     fileGroup: adm
 
