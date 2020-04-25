@@ -3,6 +3,8 @@
   package:
     name: "{{ rsyslog_packages }}"
     state: present
+  notify:
+    - restart rsyslog
 
 - name: Create the rsyslog work directory
   file:
