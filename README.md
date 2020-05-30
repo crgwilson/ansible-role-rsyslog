@@ -1,5 +1,7 @@
 # Ansible role: Rsyslog
 
+![Molecule Test](https://github.com/crgwilson/ansible-role-rsyslog/workflows/Molecule%20Test/badge.svg)
+
 Install and configure rsyslog
 
 
